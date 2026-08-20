@@ -5,7 +5,7 @@
 1. **Bank Issuer** — bank yang digunakan Consumer untuk membayar Virtual Account.
 2. **Ayolinx** — Payment Gateway dan pengelola transaksi Virtual Account.
 3. **SedayuOne** — sistem yang menginisiasi Virtual Account dan menghitung pembagian settlement.
-4. **Consumer** — pelanggan yang melakukan pembayaran Virtual Account.
+4. **Customer** — pelanggan yang melakukan pembayaran Virtual Account.
 5. **Sub-Account** — rekening tujuan pencairan dana hasil settlement.
 
 ## Diagram
@@ -16,7 +16,7 @@ sequenceDiagram
     participant SO as SedayuOne
     participant PG as Ayolinx (Payment Gateway)
     participant BI as Bank Issuer
-    participant C as Consumer
+    participant C as Customer
     participant SA as Sub-Account
 
     SO->>PG: Initiate/Create Virtual Account
@@ -51,13 +51,13 @@ sequenceDiagram
 
 1. SedayuOne menginisiasi pembuatan Virtual Account ke Ayolinx.
 2. Ayolinx membuat transaksi dan nomor Virtual Account berdasarkan permintaan SedayuOne.
-3. Consumer melakukan pembayaran Virtual Account melalui Bank Issuer.
+3. Customer melakukan pembayaran Virtual Account melalui Bank Issuer.
 4. Bank Issuer mengirimkan inquiry ke Ayolinx untuk memvalidasi Virtual Account dan mengambil informasi tagihan.
 5. Ayolinx meneruskan inquiry tersebut ke API VA inquiry SedayuOne untuk mendapatkan konfirmasi dan detail VA.
 6. Ayolinx menyimpan informasi dari respons API inquiry di sistem Ayolinx.
 7. Bank Issuer meneruskan pembayaran ke Ayolinx. Ayolinx kemudian memanggil API Transfer-va/payment SedayuOne.
 8. Ayolinx menyimpan hasil respons dari API Transfer-va/payment di sisi Ayolinx.
-9. Ayolinx mengirimkan respons pembayaran berhasil kepada Bank Issuer. Consumer menerima konfirmasi pembayaran berhasil dan SedayuOne menerima notifikasi transaksi.
+9. Ayolinx mengirimkan respons pembayaran berhasil kepada Bank Issuer. Customer menerima konfirmasi pembayaran berhasil dan SedayuOne menerima notifikasi transaksi.
 10. Pada H+1, Ayolinx mentransfer dana ke masing-masing sub-account sesuai hasil hitungan pada response payment API SedayuOne dari proses kedelapan.
 
 ## Catatan

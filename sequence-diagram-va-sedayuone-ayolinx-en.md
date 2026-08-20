@@ -5,7 +5,7 @@
 1. **Bank Issuer** - the bank used by the Consumer to pay the Virtual Account.
 2. **Ayolinx** - the Payment Gateway and Virtual Account transaction manager.
 3. **SedayuOne** - the system that initiates the Virtual Account and calculates the settlement split.
-4. **Consumer** - the customer making the Virtual Account payment.
+4. **Customer** - the customer making the Virtual Account payment.
 5. **Sub-Account** - the destination account for disbursement of settlement funds.
 
 ## Diagram
@@ -16,7 +16,7 @@ sequenceDiagram
     participant SO as SedayuOne
     participant PG as Ayolinx (Payment Gateway)
     participant BI as Bank Issuer
-    participant C as Consumer
+    participant C as Customer
     participant SA as Sub-Account
 
     SO->>PG: Initiate/Create Virtual Account
@@ -51,13 +51,13 @@ sequenceDiagram
 
 1. SedayuOne initiates the creation of a Virtual Account to Ayolinx.
 2. Ayolinx creates the transaction and Virtual Account number based on SedayuOne's request.
-3. The Consumer makes a Virtual Account payment through the Bank Issuer.
+3. The Customer makes a Virtual Account payment through the Bank Issuer.
 4. The Bank Issuer sends an inquiry to Ayolinx to validate the Virtual Account and retrieve billing information.
 5. Ayolinx forwards the inquiry to the SedayuOne VA inquiry API to obtain confirmation and VA details.
 6. Ayolinx stores the information from the inquiry API response in Ayolinx.
 7. The Bank Issuer forwards the payment to Ayolinx. Ayolinx then calls the SedayuOne Transfer-va/payment API.
 8. Ayolinx stores the response result from the Transfer-va/payment API in Ayolinx.
-9. Ayolinx sends a successful payment response to the Bank Issuer. The Consumer receives a payment success confirmation and SedayuOne receives a transaction notification.
+9. Ayolinx sends a successful payment response to the Bank Issuer. The Customer receives a payment success confirmation and SedayuOne receives a transaction notification.
 10. On T+1, Ayolinx transfers funds to each sub-account according to the calculation result in SedayuOne's payment API response from step eight.
 
 ## Notes
