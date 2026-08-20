@@ -6,7 +6,7 @@
 2. **Ayolinx** — Payment Gateway dan pengelola transaksi Virtual Account.
 3. **SedayuOne** — sistem yang menginisiasi Virtual Account dan menghitung pembagian settlement.
 4. **Customer** — pelanggan yang melakukan pembayaran Virtual Account.
-5. **Sub-Account** — rekening tujuan pencairan dana hasil settlement.
+5. **billSubCompany** — rekening tujuan pencairan dana hasil settlement.
 
 ## Diagram
 
@@ -17,7 +17,7 @@ sequenceDiagram
     participant PG as Ayolinx (Payment Gateway)
     participant BI as Bank Issuer
     participant C as Customer
-    participant SA as Sub-Account
+    participant SA as billSubCompany
 
     SO->>PG: Initiate/Create Virtual Account
     PG->>PG: Membuat transaksi dan nomor VA
@@ -58,7 +58,7 @@ sequenceDiagram
 7. Bank Issuer meneruskan pembayaran ke Ayolinx. Ayolinx kemudian memanggil API Transfer-va/payment SedayuOne.
 8. Ayolinx menyimpan hasil respons dari API Transfer-va/payment di sisi Ayolinx.
 9. Ayolinx mengirimkan respons pembayaran berhasil kepada Bank Issuer. Customer menerima konfirmasi pembayaran berhasil dan SedayuOne menerima notifikasi transaksi.
-10. Pada H+1, Ayolinx mentransfer dana ke masing-masing sub-account sesuai hasil hitungan pada response payment API SedayuOne dari proses kedelapan.
+10. Pada H+1, Ayolinx mentransfer dana ke masing-masing billSubCompany sesuai hasil hitungan pada response payment API SedayuOne dari proses kedelapan.
 
 ## Catatan
 

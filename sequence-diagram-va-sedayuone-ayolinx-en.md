@@ -6,7 +6,7 @@
 2. **Ayolinx** - the Payment Gateway and Virtual Account transaction manager.
 3. **SedayuOne** - the system that initiates the Virtual Account and calculates the settlement split.
 4. **Customer** - the customer making the Virtual Account payment.
-5. **Sub-Account** - the destination account for disbursement of settlement funds.
+5. **billSubCompany** - the destination account for disbursement of settlement funds.
 
 ## Diagram
 
@@ -17,7 +17,7 @@ sequenceDiagram
     participant PG as Ayolinx (Payment Gateway)
     participant BI as Bank Issuer
     participant C as Customer
-    participant SA as Sub-Account
+    participant SA as billSubCompany
 
     SO->>PG: Initiate/Create Virtual Account
     PG->>PG: Create transaction and VA number
@@ -58,7 +58,7 @@ sequenceDiagram
 7. The Bank Issuer forwards the payment to Ayolinx. Ayolinx then calls the SedayuOne Transfer-va/payment API.
 8. Ayolinx stores the response result from the Transfer-va/payment API in Ayolinx.
 9. Ayolinx sends a successful payment response to the Bank Issuer. The Customer receives a payment success confirmation and SedayuOne receives a transaction notification.
-10. On T+1, Ayolinx transfers funds to each sub-account according to the calculation result in SedayuOne's payment API response from step eight.
+10. On T+1, Ayolinx transfers funds to each billSubCompany according to the calculation result in SedayuOne's payment API response from step eight.
 
 ## Notes
 
