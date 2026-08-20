@@ -25,18 +25,22 @@ sequenceDiagram
 
     C->>BI: Melakukan pembayaran VA
     BI->>PG: Inquiry Virtual Account
-    PG-->>BI: Detail tagihan dan nominal pembayaran
+    PG->>SO: Hit API inquiry VA SedayuOne
+    SO-->>PG: Respons inquiry VA
+    PG->>PG: Menyimpan informasi dari respons API di Ayolinx
+    PG-->>BI: Respons inquiry VA
 
     BI->>PG: Payment Virtual Account
-    PG->>SO: Hit API informasi settlement
+    PG->>SO: Hit API Transfer-va/payment
     SO->>SO: Menghitung pembagian dana
-    SO-->>PG: Amount settlement per sub-account
+    SO-->>PG: Response transfer-va/payment
+    PG->>PG: Menyimpan hasil respons di sisi Ayolinx
 
     PG-->>BI: Respons pembayaran berhasil
     BI-->>C: Pembayaran berhasil
     PG-->>SO: Notifikasi transaksi berhasil
 
-    Note over PG,SA: Proses settlement H+1
+    Note over PG,SA: Proses settlement H+1 berdasarkan response payment API SedayuOne
 
     PG->>SA: Pencairan dana sesuai hasil kalkulasi
     SA-->>PG: Konfirmasi dana berhasil dicairkan
@@ -49,9 +53,12 @@ sequenceDiagram
 2. Ayolinx membuat transaksi dan nomor Virtual Account berdasarkan permintaan SedayuOne.
 3. Consumer melakukan pembayaran Virtual Account melalui Bank Issuer.
 4. Bank Issuer mengirimkan inquiry ke Ayolinx untuk memvalidasi Virtual Account dan mengambil informasi tagihan.
-5. Bank Issuer meneruskan pembayaran ke Ayolinx. Ayolinx kemudian memanggil API SedayuOne untuk memperoleh nilai settlement yang telah dikalkulasi untuk setiap sub-account.
-6. Ayolinx mengirimkan respons pembayaran berhasil kepada Bank Issuer. Consumer menerima konfirmasi pembayaran berhasil dan SedayuOne menerima notifikasi transaksi.
-7. Pada H+1, Ayolinx mencairkan dana ke masing-masing sub-account sesuai hasil kalkulasi settlement dari proses kelima.
+5. Ayolinx meneruskan inquiry tersebut ke API VA inquiry SedayuOne untuk mendapatkan konfirmasi dan detail VA.
+6. Ayolinx menyimpan informasi dari respons API inquiry di sistem Ayolinx.
+7. Bank Issuer meneruskan pembayaran ke Ayolinx. Ayolinx kemudian memanggil API Transfer-va/payment SedayuOne.
+8. Ayolinx menyimpan hasil respons dari API Transfer-va/payment di sisi Ayolinx.
+9. Ayolinx mengirimkan respons pembayaran berhasil kepada Bank Issuer. Consumer menerima konfirmasi pembayaran berhasil dan SedayuOne menerima notifikasi transaksi.
+10. Pada H+1, Ayolinx mentransfer dana ke masing-masing sub-account sesuai hasil hitungan pada response payment API SedayuOne dari proses kedelapan.
 
 ## Catatan
 

@@ -25,18 +25,22 @@ sequenceDiagram
 
     C->>BI: Make VA payment
     BI->>PG: Virtual Account inquiry
-    PG-->>BI: Billing details and payment amount
+    PG->>SO: Call SedayuOne VA inquiry API
+    SO-->>PG: VA inquiry response
+    PG->>PG: Store information from the API response in Ayolinx
+    PG-->>BI: VA inquiry response
 
     BI->>PG: Virtual Account payment
-    PG->>SO: Call settlement information API
+    PG->>SO: Call Transfer-va/payment API
     SO->>SO: Calculate fund allocation
-    SO-->>PG: Settlement amount per sub-account
+    SO-->>PG: Transfer-va/payment response
+    PG->>PG: Store the response result in Ayolinx
 
     PG-->>BI: Successful payment response
     BI-->>C: Payment successful
     PG-->>SO: Successful transaction notification
 
-    Note over PG,SA: Settlement process on T+1
+    Note over PG,SA: Settlement process on T+1 based on the response from SedayuOne's payment API
 
     PG->>SA: Disburse funds according to calculation results
     SA-->>PG: Confirm funds have been disbursed successfully
@@ -49,9 +53,12 @@ sequenceDiagram
 2. Ayolinx creates the transaction and Virtual Account number based on SedayuOne's request.
 3. The Consumer makes a Virtual Account payment through the Bank Issuer.
 4. The Bank Issuer sends an inquiry to Ayolinx to validate the Virtual Account and retrieve billing information.
-5. The Bank Issuer forwards the payment to Ayolinx. Ayolinx then calls the SedayuOne API to obtain the settlement value calculated for each sub-account.
-6. Ayolinx sends a successful payment response to the Bank Issuer. The Consumer receives a payment success confirmation and SedayuOne receives a transaction notification.
-7. On T+1, Ayolinx disburses funds to each sub-account according to the settlement calculation result from step five.
+5. Ayolinx forwards the inquiry to the SedayuOne VA inquiry API to obtain confirmation and VA details.
+6. Ayolinx stores the information from the inquiry API response in Ayolinx.
+7. The Bank Issuer forwards the payment to Ayolinx. Ayolinx then calls the SedayuOne Transfer-va/payment API.
+8. Ayolinx stores the response result from the Transfer-va/payment API in Ayolinx.
+9. Ayolinx sends a successful payment response to the Bank Issuer. The Consumer receives a payment success confirmation and SedayuOne receives a transaction notification.
+10. On T+1, Ayolinx transfers funds to each sub-account according to the calculation result in SedayuOne's payment API response from step eight.
 
 ## Notes
 
